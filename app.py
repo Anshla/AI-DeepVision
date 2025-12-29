@@ -1,3 +1,5 @@
+import os
+os.environ["PYTHONWARNINGS"] = "ignore"
 import streamlit as st
 import cv2
 import torch
