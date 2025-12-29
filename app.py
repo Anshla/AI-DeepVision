@@ -60,7 +60,7 @@ if EMAIL_CONFIGURED:
             st.sidebar.error("❌ Test email failed")
             st.sidebar.text(str(e))
 else:
-    st.sidebar.warning("Email alerts are disabled (secrets not configured)")
+    st.sidebar.warning("Email alerts are disabled")
 
 # ---------------- LOAD MODEL ----------------
 @st.cache_resource
@@ -93,16 +93,13 @@ if uploaded is not None:
     if crowd_count > ALERT_THRESHOLD:
         st.error("🚨 Overcrowding Detected")
 
-        if EMAIL_CONFIGURED:
-            if st.button("Send Email Alert"):
-                try:
-                    send_email_alert(crowd_count)
-                    st.success("✅ Email alert sent")
-                except Exception as e:
-                    st.error("❌ Failed to send email alert")
-                    st.text(str(e))
-        else:
-            st.info("📧 Email alerts are disabled")
+        if EMAIL_CONFIGURED and st.button("Send Email Alert"):
+            try:
+                send_email_alert(crowd_count)
+                st.success("✅ Email alert sent")
+            except Exception as e:
+                st.error("❌ Failed to send email alert")
+                st.text(str(e))
     else:
         st.success("✅ Crowd Level Normal")
 
