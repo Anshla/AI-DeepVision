@@ -1,11 +1,11 @@
 import os
 os.environ["PYTHONWARNINGS"] = "ignore"
+
 import streamlit as st
 import cv2
 import torch
 import numpy as np
 import logging
-import os
 
 from utils.csrnet_model import CSRNet
 from utils.preprocess import preprocess_frame
@@ -25,8 +25,6 @@ def get_secret(key, default=None):
 EMAIL_SENDER = get_secret("EMAIL_SENDER")
 EMAIL_PASSWORD = get_secret("EMAIL_PASSWORD")
 EMAIL_RECEIVERS = get_secret("EMAIL_RECEIVERS")
-SMTP_SERVER = get_secret("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(get_secret("SMTP_PORT", 587))
 
 EMAIL_CONFIGURED = all([EMAIL_SENDER, EMAIL_PASSWORD, EMAIL_RECEIVERS])
 
@@ -47,20 +45,8 @@ def mask_email(addr):
     return local[0] + "***@" + domain
 
 if EMAIL_CONFIGURED:
-    st.sidebar.success(f"Email configured — sender: {mask_email(EMAIL_SENDER)}")
+    st.sidebar.success(f"Email alerts enabled — sender: {mask_email(EMAIL_SENDER)}")
     st.sidebar.write(f"Recipients: {EMAIL_RECEIVERS}")
-
-    if st.sidebar.button("📧 Send Test Email"):
-        try:
-            send_email_alert(
-                crowd_count=0,
-                subject="Test Email from AI-DeepVision",
-                message="This is a test email. Configuration is working."
-            )
-            st.sidebar.success("✅ Test email sent successfully")
-        except Exception as e:
-            st.sidebar.error("❌ Test email failed")
-            st.sidebar.text(str(e))
 else:
     st.sidebar.warning("Email alerts are disabled")
 
@@ -95,13 +81,15 @@ if uploaded is not None:
     if crowd_count > ALERT_THRESHOLD:
         st.error("🚨 Overcrowding Detected")
 
-        if EMAIL_CONFIGURED and st.button("Send Email Alert"):
+        if EMAIL_CONFIGURED:
             try:
                 send_email_alert(crowd_count)
                 st.success("✅ Email alert sent")
             except Exception as e:
                 st.error("❌ Failed to send email alert")
                 st.text(str(e))
+        else:
+            st.info("📧 Email alerts are disabled")
     else:
         st.success("✅ Crowd Level Normal")
 
