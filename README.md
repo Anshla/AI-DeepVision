@@ -59,8 +59,7 @@ pip install -r requirements.txt
 Download the trained CSRNet model file and place it in the project root directory:
 
 ```text
-best_crowd_counter_objects.pth
-```
+best_csrnet_partB.pth```
 
 ---
 
@@ -121,7 +120,7 @@ sender_password = "your-app-password"
 ```text
 AI-DeepVision/
 ├── app.py
-├── best_crowd_counter_objects.pth
+├── best_csrnet_partB.pth
 ├── requirements.txt
 ├── README.md
 ```
