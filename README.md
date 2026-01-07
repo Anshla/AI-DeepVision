@@ -45,7 +45,7 @@ This system currently supports **single image uploads** and is optimized for **d
 ```bash
 git clone https://github.com/GKSJ-Deepvision/AI-DeepVision.git
 cd AI-DeepVision
-
+```
 
 
 ### Step 2: Install Dependencies
@@ -59,10 +59,9 @@ pip install -r requirements.txt
 Download the trained CSRNet model file and place it in the project root directory:
 
 ```text
-best_csrnet_partB.pth```
+best_csrnet_partB.pth
 
----
-
+```
 ## Running the Application
 
 ```bash
