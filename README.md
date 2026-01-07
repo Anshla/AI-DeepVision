@@ -1,33 +1,134 @@
-AI-DeepVision
+# Deep Vision Crowd Monitor
 
-This project provides a Streamlit dashboard for crowd monitoring using CSRNet.
+Deep Vision Crowd Monitor is an AI-based crowd density estimation system designed for **image-level crowd analysis**.  
+The project uses deep learning models to estimate crowd count, visualize density distribution, and trigger **email alerts** when predefined thresholds are exceeded.
 
-Email alert configuration
+This system currently supports **single image uploads** and is optimized for **dense crowd scenarios**.
 
-1. Create an app password (Gmail) if your account has 2FA enabled. Use that as `EMAIL_PASSWORD`.
-2. Copy `.env.example` to `.env` and update the values.
-3. Required env vars:
-   - `EMAIL_SENDER` (your email)
-   - `EMAIL_PASSWORD` (app password)
-   - `EMAIL_RECEIVERS` (comma-separated recipient emails)
-   - `SMTP_SERVER` (defaults to `smtp.gmail.com`)
-   - `SMTP_PORT` (defaults to `587`)
+---
 
-Local testing
+## Key Features
 
-- In development, you can install `python-dotenv` and load env vars from `.env` before running Streamlit:
+### Image-Based Crowd Density Estimation
+- Upload single crowd images (JPG, PNG formats)
+- Accurate crowd counting using CSRNet
+- Density map generation for visual interpretation
+- Designed for dense and highly populated scenes
 
-```py
-from dotenv import load_dotenv
-load_dotenv()
+### Hybrid Model Strategy
+- CSRNet for density-based crowd estimation
+- YOLOv8 for person detection in sparse scenes
+- Automatic selection based on estimated crowd density
+
+### Email Alert System
+- Threshold-based alert mechanism
+- Email notifications when crowd count exceeds limits
+- Snapshot of the processed image included in alerts
+- Cooldown interval to prevent repeated notifications
+
+### Visualization
+- Density heatmap output
+- Total estimated crowd count display
+- Minimal and user-friendly Streamlit interface
+
+---
+
+## System Requirements
+- Python 3.8 or higher
+- pip package manager
+
+---
+
+## Installation and Setup
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/GKSJ-Deepvision/AI-DeepVision.git
+cd AI-DeepVision
+
+
+
+### Step 2: Install Dependencies
+
+```bash
+pip install -r requirements.txt
 ```
 
-Then run:
+### Step 3: Download Trained Model
 
+Download the trained CSRNet model file and place it in the project root directory:
+
+```text
+best_crowd_counter_objects.pth
 ```
+
+---
+
+## Running the Application
+
+```bash
 streamlit run app.py
 ```
 
-Logging
+The application will be available at:
 
-- Email send failures are logged. Check the terminal output for error details.
+```text
+http://localhost:8501
+```
+---
+
+## Workflow Overview
+1. User uploads a crowd image  
+2. Image is preprocessed and passed to the model  
+3. Crowd density map is generated  
+4. Total crowd count is calculated  
+5. Email alert is triggered if the threshold is exceeded  
+
+---
+
+## Models Used
+
+### CSRNet
+- Density-based crowd estimation model  
+- VGG16 front-end with dilated convolution back-end  
+- Suitable for dense crowd scenes  
+
+### YOLOv8
+- Object detection model  
+- Used for sparse crowd estimation  
+- Detects individual persons  
+
+---
+
+## Email Alert Configuration (Optional)
+
+Create the following file:
+```text
+.streamlit/secrets.toml
+
+```
+Add SMTP configuration:
+```toml
+[smtp]
+server = "smtp.gmail.com"
+port = 587
+sender_email = "your-email@gmail.com"
+sender_password = "your-app-password"
+```
+---
+
+## Project Structure
+```text
+AI-DeepVision/
+├── app.py
+├── best_crowd_counter_objects.pth
+├── requirements.txt
+├── README.md
+```
+---
+
+## Future Scope
+```text
+- Video-based crowd analysis
+- Live webcam crowd monitoring
+- Advanced analytics and reporting features
